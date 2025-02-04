@@ -1,0 +1,21 @@
+Peterson’s algorithm is a synchronization algorithm used to solve the critical section problem for two processes. Key properties like mutual exclusion, bounded waiting, and progress are utilized to ensure synchronization.
+
+a. A process in Peterson’s algorithm sets the turn variable to itself instead of setting it to the other
+process. The remaining algorithm stays the same.
+- This is incorrect. The turn variable in Peterson’s algorithm is used to give priority to the other process whenever there is a conflict. By setting the turn to the other process, the algorithm ensures that only one process can enter the critical section at a time. So if a process sets turn to itself, it will deny the other process the opportunity to enter the critical section even when it is that process’s turn. This will lead to a potential mutual exclusion violation, since both of the processes might think it is their turn and attempt to enter the critical section simultaneously. 
+- Here is an example of why this would make the algorithm incorrect:
+    - Suppose we have two processes, P0 and P1.
+    - Both of the processes set their respective wantCS flags to true.
+    - P0 sets turn to itself instead of P1, and P1 also sets turn to itself.
+    - Both processes check the turn variable and see that it matches their process ID.
+    - Then both processes enter the critical section at the same time, which violates mutual exclusion.
+
+b. A process sets the turn variable before setting the wantCS variable.
+- This is incorrect. In Peterson’s algorithm, the wantCS variable is an indicator of a process’s intention to enter the critical section. So, if wantCS is set first, a process will signal its intent to compete for access to the critical section. If a process sets turn BEFORE setting wantCS, it may imply to the other process that it does not want to enter the critical section yet, which can lead to a liveness issue, where one process is delayed indefinitely from entering the critical section despite the other process not actively using it.
+- Here is an example of why this would make the algorithm incorrect:
+    - P0 sets turn to P1 but delays in setting wantCS to true.
+    - P1 sees that P0 has set turn to itself but sees that P0’s wantCS is still false, so P1 then proceeds to enter the critical section.
+    - When P0 eventually does set its wantCS to true, it has to wait for P1 to exit the critical section. But, if P2 continuously alternates between the critical section and the non-critical section without allowing P0 to enter, deadlock or starvation could occur. 
+
+
+
